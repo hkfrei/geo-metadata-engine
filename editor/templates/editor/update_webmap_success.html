@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block content %}
+<header>
+  <h1>WebMap Updater</h1>
+</header>
+<div class="row gy-3">
+  <div class="col-6">
+    <div>Die WebMap wurde erfolgreich aktualisiert.</div>
+    <div class="spacer24"></div>
+    <a class="btn btn-primary" href="{% url 'editor:index' %}">Zurück</a>
+  </div>
+</div>
+{% endblock %}
