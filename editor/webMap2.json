@@ -1,0 +1,46 @@
+{
+  "operationalLayers": [
+    {
+      "id": "195a4539d90-layer-2",
+      "title": "Polygon Feature Layer",
+      "url": "https://services7.arcgis.com/EgLk9QjEcjpDw46q/arcgis/rest/services/Polygon_Feature_Layer/FeatureServer/1",
+      "itemId": "d1a668b4db134ac9a548c8cc297e90c3",
+      "layerType": "ArcGISFeatureLayer"
+    }
+  ],
+  "baseMap": {
+    "baseMapLayers": [
+      {
+        "id": "World_Imagery_2017",
+        "opacity": 1,
+        "title": "World Imagery",
+        "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+        "visibility": true,
+        "layerType": "ArcGISTiledMapServiceLayer"
+      }
+    ],
+    "title": "Imagery"
+  },
+  "authoringApp": "ArcGISMapViewer",
+  "authoringAppVersion": "2025.1",
+  "initialState": {
+    "viewpoint": {
+      "targetGeometry": {
+        "spatialReference": {
+          "latestWkid": 3857,
+          "wkid": 102100
+        },
+        "xmin": 818306.5373257523,
+        "ymin": 5931081.454229634,
+        "xmax": 831874.1098463527,
+        "ymax": 5939403.535684172
+      }
+    }
+  },
+  "spatialReference": {
+    "latestWkid": 3857,
+    "wkid": 102100
+  },
+  "timeZone": "system",
+  "version": "2.33"
+}
