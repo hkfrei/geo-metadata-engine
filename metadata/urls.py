@@ -18,7 +18,9 @@ from django.contrib import admin
 from django.urls import include, path
 
 
+
 urlpatterns = [
-    path("editor/", include("editor.urls")),
+    path("", include("editor.urls", namespace="root")),
+    path("editor/", include("editor.urls", namespace="editor")),
     path("admin/", admin.site.urls, name="admin"),
 ]
