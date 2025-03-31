@@ -3,7 +3,7 @@
   <h1>BGI WIS-BE METADATEN EDITOR</h1>
 </header>
 <div class="row gy-3">
-  <div class="col">
+  <div class="col-md-6 col-lg-4">
     <div class="card">
       <h5 class="card-header">Erfassen</h5>
       <div class="card-body">
@@ -14,7 +14,7 @@
       </div>
     </div>
   </div>
-  <div class="col">
+  <div class="col-md-6 col-lg-4">
     <div class="card">
       <h5 class="card-header">LAYERGRUPPEN (JSON)</h5>
       <div class="card-body">
@@ -28,7 +28,7 @@
       </div>
     </div>
   </div>
-  <div class="col">
+  <div class="col-md-6 col-lg-4">
     <div class="col">
       <div class="card">
         <h5 class="card-header">LAYER (JSON)</h5>
@@ -45,13 +45,26 @@
     </div>
   </div>
   <div class="col">
+    <div class="col-md-6 col-lg-4">
+      <div class="card">
+        <h5 class="card-header">Neue WebMap erstellen</h5>
+        <div class="card-body">
+          <p class="card-text">Erstellt eine neue WebMap in ArcGIS Online.</p>
+          <a class="btn btn-primary" href="{% url 'editor:createwebmap' %}"
+            >Create WebMap</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-4">
     <div class="col">
       <div class="card">
-        <h5 class="card-header">Esri WebMap</h5>
+        <h5 class="card-header">Update WebMap</h5>
         <div class="card-body">
-          <p class="card-text">Erstellen sie eine WebMap in ArcGIS Online</p>
-          <a class="btn btn-primary" href="{% url 'editor:createwebmap' %}"
-            >WebMap</a
+          <p class="card-text">Eine bestehende WebMap aktualisieren.</p>
+          <a class="btn btn-primary" href="{% url 'editor:editwebmap' %}"
+            >Update WebMap</a
           >
         </div>
       </div>
