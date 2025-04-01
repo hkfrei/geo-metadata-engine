@@ -8,6 +8,10 @@ import os
 
 # Create your views here.
 
+# Login to AGO
+gis = GIS("https://kantonbern.maps.arcgis.com/",
+          "frei.hanskaspar_WEU_AWN", "Obiwan12#*")
+
 
 def index(request):
     return render(request, 'editor/index.html')
@@ -38,9 +42,6 @@ def layergroups(request):
 
 
 def create_webmap(request):
-    gis = GIS("https://kantonbern.maps.arcgis.com/",
-              "frei.hanskaspar_WEU_AWN", "Obiwan12#*")
-    print("Successfully logged in as: " + gis.properties.user.username)
     json_path = os.path.join(os.path.dirname(__file__), 'webMap2.json')
     with open(json_path) as json_data:
         webmap_dict = json.load(json_data)
@@ -59,9 +60,6 @@ def create_webmap(request):
 
 
 def edit_webmap(request):
-    # This view is for updating a webmap in ArcGIS Online
-    gis = GIS("https://kantonbern.maps.arcgis.com/",
-              "frei.hanskaspar_WEU_AWN", "Obiwan12#*")
     # get a list of existing webMaps
     webmaps = gis.content.search(
         query="type:Web Map AND owner:frei.hanskaspar_WEU_AWN", item_type="Web Map")
@@ -72,11 +70,6 @@ def update_webmap(request):
     if request.method == 'POST':
         # Get the selected webmap ID from the form submission
         selected_webmap_id = request.POST.get('webmap_select')
-    # This view is for updating a webmap in ArcGIS Online
-
-    gis = GIS("https://kantonbern.maps.arcgis.com/",
-              "frei.hanskaspar_WEU_AWN", "Obiwan12#*")
-    print("Successfully logged in as: " + gis.properties.user.username)
 
     # get the webmap item by its id
     item = gis.content.get(selected_webmap_id)
