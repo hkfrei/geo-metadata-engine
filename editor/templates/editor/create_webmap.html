@@ -1,0 +1,50 @@
+{% extends "base.html" %} {% block content %}
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <h5 class="card-header">Neue WebMap erstellen</h5>
+      <div class="card-body">
+        <p class="card-text">Erstellt eine neue WebMap in ArcGIS Online.</p>
+
+        <form
+          id="create_webmap_form"
+          name="create_webmap_form"
+          action="{% url 'editor:savewebmap' %}"
+          method="POST"
+        >
+          {% csrf_token %}
+          <div class="mb-5">
+            <label for="webmapSelect" class="form-label"
+              >Wählen sie die Konfig für die WebMap.</label
+            >
+            <select
+              class="form-select"
+              aria-label="select webmap config"
+              name="webmap_config_select"
+            >
+              {% for config in webmapconfigs %}
+              <option selected value="{{webmap.id}}">{{webmap.title}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button id="create_webmap_btn" class="btn btn-primary" type="submit">
+            WebMap erstellen.
+          </button>
+          <button
+            id="create_webmap_spinner"
+            class="btn btn-primary visually-hidden"
+            type="button"
+            disabled
+          >
+            <span
+              class="spinner-border spinner-border-sm"
+              aria-hidden="true"
+            ></span>
+            <span role="status">WebMap wird erstellt...</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
