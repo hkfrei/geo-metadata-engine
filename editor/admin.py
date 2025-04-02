@@ -1,10 +1,13 @@
 from django.contrib import admin
-from .models import Layer, Layergroup
+from .models import Layer, Layergroup, Webmap
+
 
 class LayergroupAdmin(admin.ModelAdmin):
     # creates a nicer interface for the layer selection.
     filter_horizontal = ['layer']
 
+
 # Register your models here.
 admin.site.register(Layer)
-admin.site.register(Layergroup,LayergroupAdmin)
+admin.site.register(Webmap)
+admin.site.register(Layergroup, LayergroupAdmin)
