@@ -42,6 +42,10 @@ def layergroups(request):
 
 
 def create_webmap(request):
+    return render(request, 'editor/create_webmap.html')
+
+
+def save_webmap(request):
     json_path = os.path.join(os.path.dirname(__file__), 'webMap2.json')
     with open(json_path) as json_data:
         webmap_dict = json.load(json_data)
@@ -53,8 +57,9 @@ def create_webmap(request):
         "overwrite": True,
         "text": webmap_dict
     }
-    newmap = gis.content.add(item_properties=item_properties_dict)
-    return render(request, 'editor/create_webmap_success.html')
+    gis.content.add(item_properties=item_properties_dict)
+    return JsonResponse({"success": True, "message": "Webmap created successfully"})
+
 
 # This view is for rendering the update webmap page
 
@@ -86,3 +91,7 @@ def update_webmap(request):
 
 def update_webmap_success(request):
     return render(request, 'editor/update_webmap_success.html')
+
+
+def create_webmap_success(request):
+    return render(request, 'editor/create_webmap_success.html')
