@@ -6,6 +6,7 @@
       <div class="card-body">
         <p class="card-text">Erstellt eine neue WebMap in ArcGIS Online.</p>
 
+        {% if webmapconfigs|length > 0 %}
         <form
           id="create_webmap_form"
           name="create_webmap_form"
@@ -23,7 +24,9 @@
               name="webmap_config_select"
             >
               {% for config in webmapconfigs %}
-              <option selected value="{{webmap.id}}">{{webmap.title}}</option>
+              <option selected value="{{config.title}}">
+                {{config.title}} ({{config.culture}})
+              </option>
               {% endfor %}
             </select>
           </div>
@@ -43,6 +46,9 @@
             <span role="status">WebMap wird erstellt...</span>
           </button>
         </form>
+        {% else %}
+        <p class="card-text">Es sind keine WebMaps vorhanden.</p>
+        {% endif %}
       </div>
     </div>
   </div>
