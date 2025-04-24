@@ -1,41 +1,59 @@
 {% extends "base.html" %} {% block content %}
-<div class="row">
+<div class="row mt-5">
   <div class="col-6">
     <div class="card">
       <h5 class="card-header">WebMap aktualisieren</h5>
-      <div class="card-body">
-        <p class="card-text">
-          Aktualisiert eine bestehende WebMap in ArcGIS Online.
-        </p>
-
-        {% if webmaps|length > 0 %}
-        <form
-          id="update_webmap_form"
-          name="update_webmap_form"
-          action="{% url 'editor:updatewebmap' %}"
-          method="POST"
-        >
-          {% csrf_token %}
-          <div class="mb-5">
-            <label for="webmapSelect" class="form-label"
-              >Welche AGO WebMap möchten sie überschreiben?</label
-            >
+      <form
+        id="update_webmap_form"
+        name="update_webmap_form"
+        action="{% url 'editor:updatewebmap' %}"
+        method="POST"
+      >
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item bg-primary-subtle">
+            Wählen sie die <strong>AGO WebMap</strong> welche sie überschreiben
+            wollen.
+          </li>
+          <li class="list-group-item">
+            {% if webmaps|length > 0 %} {% csrf_token %}
             <select
               class="form-select"
               aria-label="select webmap"
               name="webmap_select"
             >
               {% for webmap in webmaps %}
-              <option
-                selected
-                data-webmapid="{{webmap.id}}"
-                value="{{webmap.id}}"
-              >
+              <option selected value="{{webmap.id}}">
                 {{webmap.title}} ({{webmap.id}})
               </option>
               {% endfor %}
             </select>
-          </div>
+            {% else %}
+            <p class="card-text">Es sind keine WebMaps vorhanden.</p>
+            {% endif %}
+          </li>
+          <li class="list-group-item bg-primary-subtle">
+            Wählen sie die <strong>Konfig</strong> mit der die WebMap
+            überschrieben werden soll.
+          </li>
+          <li class="list-group-item">
+            {% if webmapconfigs|length > 0 %}
+            <select
+              class="form-select"
+              aria-label="select config"
+              name="webmap_config_select"
+            >
+              {% for config in webmapconfigs %}
+              <option selected value="{{config.title}}">
+                {{config.title}} ({{config.culture}})
+              </option>
+              {% endfor %}
+            </select>
+            {% else %}
+            <p class="card-text">Es sind keine WebMaps vorhanden.</p>
+            {% endif %}
+          </li>
+        </ul>
+        <div class="card-footer">
           <button id="update_webmap_btn" class="btn btn-primary" type="submit">
             WebMap aktualisieren
           </button>
@@ -51,11 +69,8 @@
             ></span>
             <span role="status">WebMap wird aktualisiert...</span>
           </button>
-        </form>
-        {% else %}
-        <p class="card-text">Es sind keine WebMaps vorhanden.</p>
-        {% endif %}
-      </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>
