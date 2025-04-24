@@ -55,7 +55,7 @@ def save_webmap(request):
         snippet = webmap[0].snippet
         culture = webmap[0].culture
 
-        json_path = os.path.join(os.path.dirname(__file__), 'webMap2.json')
+        json_path = os.path.join(os.path.dirname(__file__), 'webMap.json')
         with open(json_path) as json_data:
             webmap_dict = json.load(json_data)
 
