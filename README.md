@@ -27,7 +27,7 @@ It's recommended to run the application in a virtual python environment.
 There are many ways to create one, but in this example we use conda.
 
 ```
-conda create -n bgi_metadata python=3.9
+conda create -n bgi_metadata python=3.12
 ```
 
 after the environment was created, you can activate it.
@@ -58,7 +58,7 @@ open [http://localhost:8000/](http://localhost:8000/) to see the site running.
 ## Docker
 
 In case you want to run the app as a Docker container, there is a [Dockerfile](./Dockerfile) available.
-If you have docker installed on your machine, you can use the following commands to build and run the container.
+If you have Docker installed on your machine, you can use the following commands to build and run the container.
 
 ```
 # build the image
