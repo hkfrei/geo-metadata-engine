@@ -55,6 +55,21 @@ python manage.py runserver
 
 open [http://localhost:8000/](http://localhost:8000/) to see the site running.
 
+## Docker
+
+In case you want to run the app as a Docker container, there is a [Dockerfile](./Dockerfile) available.
+If you have docker installed on your machine, you can use the following commands to build and run the container.
+
+```
+# build the image
+docker build -t bgi_metadata .
+
+# run the container
+docker run -d -p 8000:8000 bgi_metadata
+```
+
+Open [localhost:8000](http://localhost:8000) in your browser to see the app running.
+
 ## Support
 
 To get support for this project please contact:
