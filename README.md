@@ -58,6 +58,18 @@ To apply the database migrations (schema), execute the following command.
 python manage.py migrate
 ```
 
+## Create a .env file with your secrets
+
+The `.env`file should have the following content.
+
+```
+SECRET_KEY=the_django_secret_key
+AGOL_URL=your_arcgis_online_url
+AGOL_USERNAME=your_arcgis_online_username
+AGOL_PASSWORD=your_arcgis_online_password
+
+```
+
 ## Start the development server
 
 After the installation you can start the development server.<br />
