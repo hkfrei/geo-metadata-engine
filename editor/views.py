@@ -9,8 +9,8 @@ import os
 # Create your views here.
 
 # Login to AGO
-gis = GIS('https://kantonbern.maps.arcgis.com/',
-          'frei.hanskaspar_WEU_AWN', 'Obiwan12#*')
+gis = GIS(os.environ.get('AGOL_URL'), os.environ.get('AGOL_USERNAME'),os.environ.get('AGOL_PASSWORD'))
+          
 
 
 def index(request):
