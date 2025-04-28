@@ -70,6 +70,15 @@ AGOL_PASSWORD=your_arcgis_online_password
 
 ```
 
+## Create a superuser for the admin section
+
+In order to enter the admin section, we need a superuser.
+You can create it like this.
+
+```
+python manage.py createsuperuser
+```
+
 ## Start the development server
 
 After the installation you can start the development server.<br />
@@ -84,7 +93,7 @@ open [http://localhost:8000/](http://localhost:8000/) to see the site running.
 ## Docker
 
 In case you want to run the app as a Docker container, there is a [Dockerfile](./Dockerfile) available.
-If you have Docker installed on your machine, you can use the following commands to build and run the container.
+If you have Docker installed on your machine, you can use the following commands to build and run the container. (Make sure you use them after create the superuser)
 
 ```
 # build the image
