@@ -41,7 +41,21 @@ conda activate bgi_metadata
 The project needs django and other libraries which need to be installed first. We recommend using conda cause arcgis is a conda package.
 
 ```
+# First install esri::arcgis
+conda install esri::arcgis
+```
+
+```
+# Then install the packages from the requirements.txt file.
 conda install --yes --file requirements.txt
+```
+
+## Apply the migrations
+
+To apply the database migrations (schema), execute the following command.
+
+```
+python manage.py migrate
 ```
 
 ## Start the development server
