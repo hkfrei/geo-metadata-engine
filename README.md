@@ -4,8 +4,12 @@
 
 This is the metadata editor for the WIS-BE project of the canton of Bern.
 It's intention is to provide a plattform for for creating and retrieving metadata.
-One of the main goals is to retrieve metadata as JSON, which can be used to create services and
-WebMaps in ArcGIS Online.
+The main goals of this project are:
+
+- automatically create database tables from python models.
+- populate the tables with content => admin interface.
+- use the metadata tables to create automations (FME etc.).
+- create webmaps from the metadata directly in ArcGIS-Online.
 
 ## Prerequisites
 
