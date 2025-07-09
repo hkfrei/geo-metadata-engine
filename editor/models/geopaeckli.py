@@ -28,3 +28,8 @@ class Geopaeckli(models.Model):
 
     def __str__(self):
         return self.name_de
+    
+    class Meta:
+        verbose_name = "Geopäckli"
+        verbose_name_plural = "Geopäckli"
+        ordering = ["name_de"]
