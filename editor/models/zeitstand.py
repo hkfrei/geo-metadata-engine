@@ -7,3 +7,8 @@ class Zeitstand(models.Model):
 
     def __str__(self):
         return f"{self.zeitstand} ({self.publikationsdatum})"
+    
+    class Meta:
+        verbose_name = "Zeitstand"
+        verbose_name_plural = "Zeitstände"
+        ordering = ["-publikationsdatum"]
