@@ -12,6 +12,11 @@ class Attribut(models.Model):
     index = models.BooleanField()
     ebene = models.ForeignKey("Ebene", on_delete=models.CASCADE, related_name="attribute", null=True, blank=True)
     wertetabelle = models.ForeignKey("Wertetabelle", on_delete=models.CASCADE, related_name="attribute", null=True, blank=True)
-
+    
     def __str__(self):
         return self.name_attribut
+    
+    class Meta:
+        verbose_name = "Attribut"
+        verbose_name_plural = "Attribute"
+        ordering = ["name_attribut"]
