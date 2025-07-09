@@ -9,3 +9,8 @@ class Thema(models.Model):
 
     def __str__(self):
         return self.technischer_name
+    
+    class Meta:
+        verbose_name = "Thema"
+        verbose_name_plural = "Themen"
+        ordering = ["technischer_name"]
