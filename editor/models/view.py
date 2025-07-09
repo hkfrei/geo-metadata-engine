@@ -7,3 +7,8 @@ class View(models.Model):
 
     def __str__(self):
         return self.name_view
+    
+    class Meta:
+        verbose_name = "View"
+        verbose_name_plural = "Views"
+        ordering = ["name_view"]
