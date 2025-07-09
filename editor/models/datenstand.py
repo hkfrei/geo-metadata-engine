@@ -6,3 +6,8 @@ class Datenstand(models.Model):
 
     def __str__(self):
         return self.datenstand
+    
+    class Meta:
+        verbose_name = "Datenstand"
+        verbose_name_plural = "Datenstände"
+        ordering = ["datenstand"]
