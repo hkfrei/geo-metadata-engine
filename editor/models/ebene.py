@@ -26,3 +26,8 @@ class Ebene(models.Model):
 
     def __str__(self):
         return self.titel_de
+    
+    class Meta:
+        verbose_name = "Ebene"
+        verbose_name_plural = "Ebenen"
+        ordering = ["titel_de"]
