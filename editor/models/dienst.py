@@ -16,3 +16,8 @@ class Dienst(models.Model):
 
     def __str__(self):
         return self.name_dienst_de
+    
+    class Meta:
+        verbose_name = "Dienst"
+        verbose_name_plural = "Dienste"
+        ordering = ["name_dienst_de"]
