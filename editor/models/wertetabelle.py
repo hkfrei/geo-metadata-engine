@@ -6,3 +6,8 @@ class Wertetabelle(models.Model):
 
     def __str__(self):
         return self.name_tabelle
+    
+    class Meta:
+        verbose_name = "Wertetabelle"
+        verbose_name_plural = "Wertetabellen"
+        ordering = ["name_tabelle"]
