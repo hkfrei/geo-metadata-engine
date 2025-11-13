@@ -4,7 +4,6 @@ from .webmap import Webmap
 from .map import Map
 from .dienst import Dienst
 from .attribut import Attribut
-from .datenstand import Datenstand
 from .geopaeckli import Geopaeckli
 from .app import App
 from .thema import Thema
@@ -13,4 +12,6 @@ from .tag import Tag
 from .wertetabelle import Wertetabelle
 from .view import View
 from .workflow import Workflow
-from .zeitstand import Zeitstand
+from .trigger import Trigger
+  
+

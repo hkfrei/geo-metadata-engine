@@ -19,13 +19,23 @@ class Ebene(models.Model):
     editierbar = models.BooleanField()
     featurekategorie = models.CharField(max_length=50,choices= FEATUREKAT_CHOISES)
     zugangsberechtigung = models.CharField(max_length=1, choices = ZUGANGS_CHOISES)
-    foerderprogramm = models.CharField(max_length=100)
-    dokumentation = models.URLField(blank=True, null=True)
-    bemerkungen = models.TextField(blank=True, null=True)
+    FOERDERPROGRAMM_CHOISES = [
+                        ('NFA','NFA'),
+                        ('Prosam','Prosam'),
+                        ('Andere','Andere')
+                        ]
+    foerderprogramm = models.CharField(max_length=100, choices=FOERDERPROGRAMM_CHOISES, default='Andere')
+    dokumentation = models.TextField(blank=True, null=True)
     geopaeckli = models.ForeignKey("Geopaeckli", on_delete=models.CASCADE)
+    # datenstand was a separate model; replace with an optional DateField on Ebene
+    datenstand_date = models.DateField(null=True, blank=True)
+    tags = models.ManyToManyField("Tag", related_name='Ebene', blank=True)
+    triggers = models.ManyToManyField("Trigger", related_name="ebenen", blank=True)
+    dienst = models.ForeignKey("Dienst", on_delete=models.CASCADE, null=True, blank=True)
+    views = models.ManyToManyField("View", blank=True)
 
     def __str__(self):
-        return self.titel_de
+        return f"{self.name} ({self.geopaeckli})"
     
     class Meta:
         verbose_name = "Ebene"
