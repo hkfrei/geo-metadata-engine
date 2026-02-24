@@ -20,12 +20,20 @@ class Attribut(models.Model):
     pflicht = models.BooleanField()
     unique = models.BooleanField()
     index = models.BooleanField()
-    ebene = models.ForeignKey("Ebene", on_delete=models.CASCADE, related_name="attribute", null=True, blank=True)
+    # Use geopaeckli FK only (DB has geopaeckli_id; ebene_id is not present
+    # in editor_attribut). This avoids missing-column errors in the admin.
+    geopaeckli = models.ForeignKey(
+        "Geopaeckli",
+        on_delete=models.SET_NULL,
+        related_name="attribute_geopaeckli",
+        null=True,
+        blank=True,
+    )
     wertetabelle = models.ForeignKey("Wertetabelle", on_delete=models.CASCADE, related_name="attribute", null=True, blank=True)
 
     def __str__(self):
-        if self.ebene:
-            return f"{self.name_attribut} ({self.ebene})"
+        if getattr(self, 'geopaeckli', None):
+            return f"{self.name_attribut} ({self.geopaeckli})"
         elif self.wertetabelle:
             return f"{self.name_attribut} ({self.wertetabelle})"
         return self.name_attribut
@@ -38,7 +46,6 @@ class Attribut(models.Model):
 
     def clean(self):
         super().clean()
-        # Attribut must be linked to an Ebene. Wertetabelle is optional and may
-        # be provided in addition to the Ebene, but cannot be used as a replacement.
-        if not self.ebene:
-            raise ValidationError("Ein Attribut muss einer Ebene zugeordnet sein.")
+        # Attributes may be unbound from an Ebene and belong to a Geopaeckli.
+        # Keep validation light here; DB enforces relational integrity.
+        return
