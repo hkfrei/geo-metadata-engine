@@ -19,7 +19,7 @@ def forwards_populate_geopaeckli(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("editor", "0013_add_geopaeckli_to_wertetabelle_and_migrate"),
+        ("editor", "0012_remove_ebene_from_attribut"),
     ]
 
     operations = [
