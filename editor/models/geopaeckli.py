@@ -46,7 +46,7 @@ class Geopaeckli(models.Model):
         ordering = ["name_de"]
 
     def save(self, *args, **kwargs):
-        # Normalisiere technischen Namen automatisch (slugify -> Unterstrich) und stelle Einzigartigkeit sicher
+        # Normalisiere technischen Namen automatisch und stelle Einzigartigkeit sicher
         base_source = self.technischer_name or self.name_de or ''
         base = slugify(base_source).replace('-', '_')
         if not base:

@@ -22,10 +22,11 @@ class Ebene(models.Model):
     zugangsberechtigung = models.CharField(max_length=1, choices = ZUGANGS_CHOISES)
     FOERDERPROGRAMM_CHOISES = [
                         ('NFA','NFA'),
-                        ('Prosam','Prosam'),
-                        ('Andere','Andere')
+                        ('Kantonales Förderprogramm','Kantonales Förderprogramm'),
+                        ('ohne staatliche Förderung','ohne staatliche Förderung'),
+                        ('---','---')
                         ]
-    foerderprogramm = models.CharField(max_length=100, choices=FOERDERPROGRAMM_CHOISES, default='Andere')
+    foerderprogramm = models.CharField(max_length=100, choices=FOERDERPROGRAMM_CHOISES, default='---')
     dokumentation = models.TextField(blank=True, null=True)
     geopaeckli = models.ForeignKey("Geopaeckli", on_delete=models.CASCADE)
     # datenstand was a separate model; replace with an optional DateField on Ebene
