@@ -1,42 +1,25 @@
-digraph G {
-  rankdir=LR;
-  node [shape=record, fontname="Arial"];
+digraph model_relations {
+    rankdir=LR;
+    node [shape=record, fontname="Helvetica"];
 
-  Geopaeckli [label="{Geopaeckli|thema FK -> Thema}"];
-  Thema [label="{Thema}"];
+    // Nodes: fields show key FK and nullability
+    Geopaeckli [label="{Geopaeckli|id}"];
 
-  Ebene [label="{Ebene|geopaeckli FK -> Geopaeckli\ndienst FK -> Dienst\ntags M2M -> Tag\ntriggers M2M -> Trigger\nviews M2M -> View\nattributes_shared M2M -> Attribut}"];
+    Ebene [label="{Ebene|id\lgeopaeckli_id : FK -> Geopaeckli (NOT NULL)\l}"];
 
-  Attribut [label="{Attribut|geopaeckli FK -> Geopaeckli\nwertetabelle FK -> Wertetabelle}"];
+    Wertetabelle [label="{Wertetabelle|id\lebene_id : FK -> Ebene (nullable)\lgeopaeckli_id : FK -> Geopaeckli (NOT NULL)\l}"];
 
-  Wertetabelle [label="{Wertetabelle|ebene FK -> Ebene\ngeopaeckli FK -> Geopaeckli}"];
+    Attribut [label="{Attribut|id\lwertetabelle_id : FK -> Wertetabelle (nullable)\lgeopaeckli_id : FK -> Geopaeckli (nullable)\l}"];
 
-  Dienst [label="{Dienst|wertetabellen M2M -> Wertetabelle}"];
-  View [label="{View|dienst FK -> Dienst}"];
-  Map [label="{Map|dienste M2M -> Dienst}"];
-  App [label="{App|map OneToOne -> Map}"];
-  Layergroup [label="{Layergroup|layer M2M -> Layer}"];
-  Layer [label="{Layer}"];
-  Tag [label="{Tag}"];
-  Trigger [label="{Trigger}"];
-  Workflow [label="{Workflow|apps M2M -> App}"];
-  Webmap [label="{Webmap}"];
+    // Relationships (arrow direction = FK -> referenced model)
+    Ebene -> Geopaeckli [label="ebene.geopaeckli_id\n1..*", arrowhead=normal];
+    Wertetabelle -> Geopaeckli [label="wertetabelle.geopaeckli_id\n1..*", arrowhead=normal];
+    Attribut -> Geopaeckli [label="attribut.geopaeckli_id\n0..* (nullable)", arrowhead=normal];
 
-  Geopaeckli -> Thema [label="thema FK", fontsize=10];
-  Ebene -> Geopaeckli [label="geopaeckli FK", fontsize=10];
-  Ebene -> Dienst [label="dienst FK", fontsize=10];
-  Ebene -> Tag [label="tags M2M", dir=both, fontsize=10];
-  Ebene -> Trigger [label="triggers M2M", dir=both, fontsize=10];
-  Ebene -> View [label="views M2M", dir=both, fontsize=10];
-  Ebene -> Attribut [label="attributes_shared M2M", dir=both, fontsize=10];
-  Attribut -> Geopaeckli [label="geopaeckli FK", fontsize=10];
-  Attribut -> Wertetabelle [label="wertetabelle FK", fontsize=10];
-  Wertetabelle -> Ebene [label="ebene FK", fontsize=10];
-  Wertetabelle -> Geopaeckli [label="geopaeckli FK", fontsize=10];
-  Dienst -> Wertetabelle [label="wertetabellen M2M", dir=both, fontsize=10];
-  View -> Dienst [label="dienst FK", fontsize=10];
-  Map -> Dienst [label="dienste M2M", dir=both, fontsize=10];
-  App -> Map [label="map OneToOne", fontsize=10];
-  Layergroup -> Layer [label="layer M2M", dir=both, fontsize=10];
-  Workflow -> App [label="apps M2M", dir=both, fontsize=10];
+    Wertetabelle -> Ebene [label="wertetabelle.ebene_id\n0..* (nullable)", arrowhead=normal];
+    Attribut -> Wertetabelle [label="attribut.wertetabelle_id\n0..* (nullable)", arrowhead=normal];
+
+    // Meta label
+    labelloc="t";
+    label="Model relations — current state (2026-03-06)\nArrow: FK -> referenced model; labels show FK field and cardinality/nullability";
 }

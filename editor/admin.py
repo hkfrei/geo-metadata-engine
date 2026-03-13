@@ -1,8 +1,17 @@
 from django.contrib import admin
 from django import forms
-from .models import Map, Dienst, Attribut, Geopaeckli, App, Thema, Ebene, Tag, Wertetabelle, View, Workflow, Trigger
 from django.db import models
 
+from .models import (
+    Map, Dienst, Attribut, Geopaeckli, App, Thema, Ebene,
+    Tag, Wertetabelle, View, Workflow, Trigger,
+    AttributV2, WertetabelleV2, EbeneV2,
+)
+
+
+# ===========================================================================
+# ALTE MODELS (unverändert, ausser Registrierung unten auskommentiert)
+# ===========================================================================
 
 class EbeneForm(forms.ModelForm):
     class Meta:
@@ -11,8 +20,6 @@ class EbeneForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Try to determine geopaeckli from POST/initial/instance to limit the
-        # attributes_shared queryset on the form (helps during create).
         geop = None
         if self.data.get('geopaeckli'):
             try:
@@ -25,13 +32,13 @@ class EbeneForm(forms.ModelForm):
             geop = getattr(self.instance.geopaeckli, 'id', None)
 
         if geop:
-            # include attributes directly assigned to the Geopaeckli
             self.fields['attributes_shared'].queryset = Attribut.objects.filter(
                 geopaeckli_id=geop
             )
-            # and limit wertetabelle choices to same geopaeckli
             if 'wertetabelle' in self.fields:
-                self.fields['wertetabelle'].queryset = Wertetabelle.objects.filter(geopaeckli_id=geop)
+                self.fields['wertetabelle'].queryset = Wertetabelle.objects.filter(
+                    geopaeckli_id=geop
+                )
 
     def clean(self):
         cleaned = super().clean()
@@ -40,15 +47,15 @@ class EbeneForm(forms.ModelForm):
         if attrs and geop:
             for attr in attrs:
                 if getattr(attr, 'geopaeckli', None) != geop:
-                    raise forms.ValidationError({'attributes_shared': "Ausgewählte Attribute müssen zum selben Geopäckli gehören wie die Ebene."})
-        # Make the selected attributes available to the model.clean() via cache
+                    raise forms.ValidationError({
+                        'attributes_shared': "Ausgewählte Attribute müssen zum selben Geopäckli gehören wie die Ebene."
+                    })
         if attrs is not None:
             self.instance._attributes_shared_cache = list(attrs)
         return cleaned
 
 
 class MapAdmin(admin.ModelAdmin):
-    # creates a nicer interface for the layer selection.
     filter_horizontal = ['dienste']
 
 class DienstAdmin(admin.ModelAdmin):
@@ -60,17 +67,13 @@ class AttributInline(admin.StackedInline):
     extra = 0
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        # Limit the wertetabelle choices to those belonging to the same geopaeckli
-        # as the parent Geopaeckli when editing/adding inline under a Geopaeckli.
         if db_field.name == 'wertetabelle':
             geop = None
-            # try POST/initial data first
             if request.POST.get('geopaeckli'):
                 try:
                     geop = int(request.POST.get('geopaeckli'))
                 except Exception:
                     geop = None
-            # try to infer parent id from URL (/admin/editor/geopaeckli/<id>/change/)
             if not geop:
                 try:
                     parts = request.path.strip('/').split('/')
@@ -83,7 +86,6 @@ class AttributInline(admin.StackedInline):
                 kwargs['queryset'] = Wertetabelle.objects.filter(geopaeckli_id=geop)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-    # Use raw_id_fields to allow fast lookup/search of Wertetabelle via popup
     raw_id_fields = ('wertetabelle',)
 
 class GeopaeckliAdmin(admin.ModelAdmin):
@@ -104,21 +106,17 @@ class WorkflowAdmin(admin.ModelAdmin):
 
 class EbeneAdmin(admin.ModelAdmin):
     form = EbeneForm
-    # show attributes_shared with the same UI as tags (horizontal filter)
-    # Attributes are managed on the Geopaeckli level; remove inline here.
     filter_horizontal = ['tags', 'attributes_shared']
     list_display = ('name', 'geopaeckli')
     exclude = ('triggers', 'dienst', 'views')
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'attributes_shared':
-            # Try to get geopaeckli id from request path (/admin/editor/ebene/<id>/change/)
             try:
                 parts = request.path.strip('/').split('/')
                 if 'change' in parts:
                     idx = parts.index('change')
                     pk = int(parts[idx-1])
-                    from .models import Ebene, Attribut
                     ebene = Ebene.objects.filter(pk=pk).first()
                     if ebene:
                         kwargs['queryset'] = Attribut.objects.filter(geopaeckli=ebene.geopaeckli)
@@ -126,21 +124,15 @@ class EbeneAdmin(admin.ModelAdmin):
                 pass
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
-# Remove previous GeopaeckliAdmin definition further above
-
 class WertetabelleAdmin(admin.ModelAdmin):
     list_display = ('name_tabelle', 'geopaeckli')
-    # Hide the 'ebene' field in the admin form — use geopaeckli only in the editor
     exclude = ('ebene',)
-    # enable searching in the popup/raw-id selector
     search_fields = ('name_tabelle',)
 
 class AttributAdmin(admin.ModelAdmin):
     list_display = ('name_attribut', 'geopaeckli', 'wertetabelle')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        # Limit wertetabelle choices to Wertetabellen of the same geopaeckli as
-        # the attribute being edited/created. Try POST, then object instance.
         if db_field.name == 'wertetabelle':
             geop = None
             if request.POST.get('geopaeckli'):
@@ -148,7 +140,6 @@ class AttributAdmin(admin.ModelAdmin):
                     geop = int(request.POST.get('geopaeckli'))
                 except Exception:
                     geop = None
-            # if editing an existing object, try to get its geopaeckli
             if not geop:
                 try:
                     parts = request.path.strip('/').split('/')
@@ -162,17 +153,142 @@ class AttributAdmin(admin.ModelAdmin):
             if geop:
                 kwargs['queryset'] = Wertetabelle.objects.filter(geopaeckli_id=geop)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
-    # allow raw id popup search for wertetabelle
+
     raw_id_fields = ('wertetabelle',)
 
 
-# Register your models here.
-admin.site.register(Attribut, AttributAdmin)
-admin.site.register(Geopaeckli, GeopaeckliAdmin)
+# ===========================================================================
+# V2 MODELS
+# ===========================================================================
+
+class WertetabelleV2Inline(admin.TabularInline):
+    model = AttributV2.wertetabellen.through
+    extra = 0
+    verbose_name = "Wertetabelle V2"
+    verbose_name_plural = "Wertetabellen V2"
+
+
+class AttributV2Inline(admin.StackedInline):
+    model = AttributV2
+    extra = 0
+    show_change_link = True
+    fields = (
+        'name_attribut', 'kurzbezeichnung_de', 'kurzbezeichnung_fr',
+        'beschreibung_de', 'attributtyp', 'attributlaenge',
+        'pflicht', 'unique', 'index',
+    )
+
+
+class EbeneV2Form(forms.ModelForm):
+    class Meta:
+        model = EbeneV2
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        geop_id = None
+        if self.data.get('geopaeckli'):
+            try:
+                geop_id = int(self.data['geopaeckli'])
+            except (ValueError, TypeError):
+                pass
+        if not geop_id and self.instance and self.instance.pk:
+            geop_id = self.instance.geopaeckli_id
+
+        if geop_id:
+            self.fields['attribute'].queryset = AttributV2.objects.filter(
+                geopaeckli_id=geop_id
+            )
+        else:
+            self.fields['attribute'].queryset = AttributV2.objects.none()
+
+    def clean(self):
+        cleaned = super().clean()
+        attribute = cleaned.get('attribute')
+        geopaeckli = cleaned.get('geopaeckli')
+        if attribute and geopaeckli:
+            falsche = [a for a in attribute if a.geopaeckli != geopaeckli]
+            if falsche:
+                raise forms.ValidationError({
+                    'attribute': (
+                        "Folgende Attribute gehören nicht zum gewählten Geopäckli: "
+                        + ", ".join(str(a) for a in falsche)
+                    )
+                })
+        return cleaned
+
+
+class EbeneV2Admin(admin.ModelAdmin):
+    form = EbeneV2Form
+    list_display = ('name', 'geopaeckli', 'dienst', 'featurekategorie')
+    list_filter = ('geopaeckli', 'featurekategorie', 'zugangsberechtigung')
+    search_fields = ('name', 'titel_de')
+    filter_horizontal = ('attribute', 'tags', 'triggers', 'views')
+    fieldsets = (
+        (None, {
+            'fields': (
+                'name', 'titel_de', 'titel_fr',
+                'kurzbeschreibung_de', 'kurzbeschreibung_fr',
+                'featurekategorie', 'zugangsberechtigung', 'foerderprogramm',
+                'editierbar', 'datenstand_date', 'dokumentation',
+                'geopaeckli', 'dienst',
+            ),
+        }),
+        ('Attribute', {
+            'fields': ('attribute',),
+            'description': 'Nur Attribute des gewählten Geopäcklis werden angezeigt.',
+        }),
+        ('Weitere Verknüpfungen', {
+            'classes': ('collapse',),
+            'fields': ('tags', 'triggers', 'views'),
+        }),
+    )
+
+
+class AttributV2Admin(admin.ModelAdmin):
+    inlines = [WertetabelleV2Inline]
+    list_display = ('name_attribut', 'geopaeckli', 'attributtyp', 'anzahl_wertetabellen')
+    list_filter = ('geopaeckli', 'attributtyp')
+    search_fields = ('name_attribut',)
+
+    def anzahl_wertetabellen(self, obj):
+        return obj.wertetabellen.count()
+    anzahl_wertetabellen.short_description = "# Wertetabellen"
+
+
+class WertetabelleV2Admin(admin.ModelAdmin):
+    list_display = ('name_tabelle', 'geopaeckli', 'anzahl_attribute')
+    list_filter = ('geopaeckli',)
+    search_fields = ('name_tabelle',)
+
+    def anzahl_attribute(self, obj):
+        return obj.v2_attribute.count()
+    anzahl_attribute.short_description = "# Attribute"
+
+
+class GeopaeckliV2Admin(admin.ModelAdmin):
+    inlines = [AttributV2Inline]
+    list_display = ('name_de', 'technischer_name', 'thema')
+    prepopulated_fields = {'technischer_name': ('name_de',)}
+    search_fields = ('name_de', 'technischer_name')
+    list_filter = ('thema',)
+
+
+# ===========================================================================
+# REGISTRIERUNGEN
+# Alte Models auskommentiert — V2 aktiv
+# ===========================================================================
+
+# admin.site.register(Attribut, AttributAdmin)
+# admin.site.register(Wertetabelle, WertetabelleAdmin)
+# admin.site.register(Ebene, EbeneAdmin)
+# admin.site.register(Geopaeckli, GeopaeckliAdmin)
+
 admin.site.register(Thema)
-admin.site.register(Ebene, EbeneAdmin)
+admin.site.register(Geopaeckli, GeopaeckliV2Admin)
 admin.site.register(Tag, TagAdmin)
-admin.site.register(Wertetabelle, WertetabelleAdmin)
-# Note: Map, Dienst, App, View, Workflow and Trigger are intentionally not registered to hide them from the admin frontend.
-
-
+admin.site.register(View, ViewAdmin)
+admin.site.register(Workflow, WorkflowAdmin)
+admin.site.register(AttributV2, AttributV2Admin)
+admin.site.register(WertetabelleV2, WertetabelleV2Admin)
+admin.site.register(EbeneV2, EbeneV2Admin)

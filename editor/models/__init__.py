@@ -13,5 +13,8 @@ from .wertetabelle import Wertetabelle
 from .view import View
 from .workflow import Workflow
 from .trigger import Trigger
+from .attribut_v2 import AttributV2
+from .wertetabelle_v2 import WertetabelleV2
+from .ebene_v2 import EbeneV2
   
 
