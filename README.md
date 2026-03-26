@@ -1,130 +1,119 @@
-# GEO Metadaten Engine
+# GEO Metadata Engine
 
-![matadata](https://github.com/user-attachments/assets/da5b4aac-eb68-4a94-b6a9-563bd5c2177a)
+![metadata](https://github.com/user-attachments/assets/da5b4aac-eb68-4a94-b6a9-563bd5c2177a)
 
-This is the metadata editor for the WIS-BE project of the canton of Bern.
-It's intention is to provide a plattform for for creating and retrieving metadata.
-The main goals of this project are:
+Open-source metadata management platform for the WIS-BE project of the Canton of Bern. It provides a structured way to capture, manage, and retrieve geospatial metadata through a web-based admin interface.
 
-- automatically create database tables from python models.
-- populate the tables with content => admin interface.
-- use the metadata tables to create automations (FME etc.).
-- create webmaps from the metadata directly in ArcGIS-Online.
+GEO Metadata Engine is open-source software, licensed under the [BSD 3-Clause License](LICENSE).
 
-## Prerequisites
+## Key Features
 
-To run this project, we recommend to use the **conda** package manager. <br />
-[Here](https://docs.conda.io/en/latest/) you can find more information about it.
+- Manage geospatial metadata (topics, geo packages, layers, attributes, value tables) via a Django admin interface
+- Hierarchical data model: Thema → Geopäckli → Ebene / Attribut / Wertetabelle
+- Bilingual support (German / French)
+- PostgreSQL backend with full migration history
 
-## Getting started
+## Development Status
 
-First, get a copy of the app to your local machine:
+The application is production-ready. The remaining open item is ADFS (Active Directory Federation Services) authentication support.
+
+## Demo
+
+No public demo instance is currently available.
+
+## Contact
+
+The technical contact for GEO Metadata Engine is the Bereich Geoinformation of the Amt für Wald und Naturgefahren, Canton of Bern. They can be reached at wald@be.ch.
+
+**Project owner:**
+Kanton Bern
+Amt für Wald und Naturgefahren
+Abteilung Fachdienste und Ressourcen
+Bereich Geoinformation
+
+## Using GEO Metadata Engine
+
+### Prerequisites
+
+To run this project, we recommend the **conda** package manager.
+See [the conda documentation](https://docs.conda.io/en/latest/) for installation instructions.
+
+### Installation
+
+Clone the repository:
 
 ```
 git clone https://github.com/hkfrei/bgi_metadata.git
 cd bgi_metadata
 ```
 
-## Create a virtual environment
-
-It's recommended to run the application in a virtual python environment.
-There are many ways to create one, but in this example we use conda.
+Create and activate a virtual environment:
 
 ```
 conda create -n bgi_metadata python=3.12
-```
-
-after the environment was created, you can activate it.
-
-```
 conda activate bgi_metadata
 ```
 
-## Install requirements
-
-The project needs django and other libraries which need to be installed first. We recommend using conda cause arcgis is a conda package.
+Install dependencies:
 
 ```
-# First install esri::arcgis
-conda install esri::arcgis
-```
-
-```
-# Then install the packages from the requirements.txt file.
 conda install --yes --file requirements.txt
 ```
 
-## Apply the migrations
+Create a `.env` file in the project root:
 
-To apply the database migrations (schema), execute the following command.
+```
+SECRET_KEY=<your Django secret key>
+DEBUG=<True for development, False for production>
+DB_HOST=<hostname of your PostgreSQL server>
+DB_NAME=<name of your PostgreSQL database>
+DB_USER=<PostgreSQL user>
+DB_PASSWORD=<PostgreSQL password>
+DB_PORT=<PostgreSQL port, typically 5432>
+```
+
+Apply migrations and create an admin user:
 
 ```
 python manage.py migrate
-```
-
-## Create a .env file with your secrets
-
-The `.env`file should have the following content.
-
-```
-SECRET_KEY=the_django_secret_key
-AGOL_URL=your_arcgis_online_url
-AGOL_USERNAME=your_arcgis_online_username
-AGOL_PASSWORD=your_arcgis_online_password
-
-```
-
-## Create a superuser for the admin section
-
-In order to enter the admin section, we need a superuser.
-You can create it like this.
-
-```
 python manage.py createsuperuser
 ```
 
-## Start the development server
-
-After the installation you can start the development server.<br />
-In your console run the following command.
+Start the development server:
 
 ```
 python manage.py runserver
 ```
 
-open [http://localhost:8000/](http://localhost:8000/) to see the site running.
+Open [http://localhost:8000/](http://localhost:8000/) in your browser.
 
-## Docker
+### Docker
 
-In case you want to run the app as a Docker container, there is a [Dockerfile](./Dockerfile) available.
-If you have Docker installed on your machine, you can use the following commands to build and run the container. (Make sure you use them after create the superuser)
+A [Dockerfile](./Dockerfile) is available for containerised deployments.
 
 ```
-# build the image
-docker build -t bgi_metadata .
+# Build the image
+docker build -t geo_metadata_engine .
 
-# run the container
-docker run -d -p 8000:8000 bgi_metadata
+# Run the container
+docker run -d -p 8000:8000 geo_metadata_engine
 ```
 
-Open [localhost:8000](http://localhost:8000) in your browser to see the app running.
+## Contributing to GEO Metadata Engine
 
-## Support
+Please read the following documents before contributing:
 
-To get support for this project please contact:
+- [Developer Guidelines](CONTRIBUTING.md)
+- [Developer Documentation](CLAUDE.md)
 
-**Kanton Bern**<br />
-Amt für Wald und Naturgefahren<br />
-Abteilung Fachdienste und Ressourcen<br />
-Bereich Geoinformation<br />
+## Contributors
 
-## Contributing
+- [Nina Bonassi](https://github.com/nninnja) (Developer)
+- [Pascal Ehrler]() (Product Manager)
+- [Hanskaspar Frei](https://github.com/hkfrei) (Initial developer & Architect)
 
-Pull requests are welcome. For major changes, please open an issue first
-to discuss what you would like to change.
+(in alphabetical order)
 
-Please make sure to update tests as appropriate.
+## Third-Party Licenses
 
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+See [THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md) for a list of open-source libraries used by this project.
