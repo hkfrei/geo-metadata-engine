@@ -1,6 +1,5 @@
-arcgis
-Django==4.2
-gunicorn==23.0.0
-psycopg2
+Django==6.0.3
+gunicorn==25.2.0
+psycopg2-binary
 python-dotenv
 whitenoise
