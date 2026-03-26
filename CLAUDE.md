@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BGI Metadata Editor — a Django-based metadata management system for the WIS-BE project of Canton Bern. It manages geospatial metadata (layers, attributes, value tables) and integrates with ArcGIS Online to create and update web maps.
+BGI Metadata Editor — a Django-based metadata management system for the WIS-BE project of Canton Bern. It manages geospatial metadata (layers, attributes, value tables).
 
 ## Development Setup
 
@@ -52,7 +52,7 @@ editor/            # Single Django app containing all business logic
   urls.py          # App-level URL routing
   templates/       # HTML templates
   migrations/      # Database schema history
-  webMap.json      # Template used when creating ArcGIS web maps
+  webMap.json      # Web map template
 ```
 
 ### Data Model Hierarchy
@@ -65,20 +65,9 @@ editor/            # Single Django app containing all business logic
 - **Attribut**: Data field descriptor (name, type, constraints); belongs to Geopäckli; M2M with Ebene and Wertetabellen
 - **Wertetabelle**: Enumeration/value table; belongs to Geopäckli; M2M with Attribut
 - **Dienst**: Web service metadata (AWN/AGI owner, external flag)
-- **Webmap**: ArcGIS Online web map config (title, description, culture DE/FR)
+- **Webmap**: Web map config (title, description, culture DE/FR)
 
 Key design decision: Attribute belong to Geopäckli (not Ebene), so they survive layer deletion and can be reused across layers via M2M.
-
-### API Endpoints (editor/views.py)
-
-- `GET /layers/` — JSON list of all Ebene objects
-- `GET /layergroups/` — JSON hierarchy of layer groups with their layers
-- `POST /savewebmap` — Creates a new ArcGIS Online web map from `webMap.json` template
-- `POST /updatewebmap/` — Updates an existing ArcGIS Online item
-
-### ArcGIS Online Integration
-
-The app connects to ArcGIS Online using the `arcgis` Python package with credentials from `.env`. Web map creation reads `editor/webMap.json` as a template, substitutes metadata fields, and calls `gis.content.add()` or `item.update()`.
 
 ### Admin Interface
 
