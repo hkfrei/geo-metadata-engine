@@ -96,7 +96,10 @@ A [Dockerfile](./Dockerfile) is available for containerised deployments.
 docker build -t geo_metadata_engine .
 
 # Run the container
-docker run -d -p 8000:8000 geo_metadata_engine
+# --network=host is required on Linux so the container can reach the PostgreSQL
+# instance running on the host machine (localhost inside the container refers
+# to the container itself, not the host).
+docker run -d --network=host geo_metadata_engine
 ```
 
 ## Contributing to GEO Metadata Engine

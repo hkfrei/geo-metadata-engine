@@ -1,5 +1,5 @@
 # stage 1: base build stage
-FROM python:3.12-slim AS builder
+FROM python:3.14-slim AS builder
 
 # create the app directory
 RUN mkdir /app
@@ -23,14 +23,14 @@ COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # stage 2: production stage
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 RUN useradd -m -r appuser && \
     mkdir /app && \
     chown -R appuser /app
 
 # copy the python dependencies from the builder stage
-COPY --from=builder /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
+COPY --from=builder /usr/local/lib/python3.14/site-packages/ /usr/local/lib/python3.14/site-packages/
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 
 # set the working directory to /app
@@ -41,9 +41,6 @@ COPY --chown=appuser:appuser . .
 
 # collect static files
 RUN python manage.py collectstatic --noinput
-
-# run migrations
-RUN python manage.py migrate
 
 # set the environment variables to optimize python
 ENV PYTHONDONTWRITEBYTECODE=1
