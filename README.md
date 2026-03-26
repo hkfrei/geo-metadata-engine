@@ -2,7 +2,7 @@
 
 ![metadata](https://github.com/user-attachments/assets/da5b4aac-eb68-4a94-b6a9-563bd5c2177a)
 
-Open-source metadata management platform for the WIS-BE project of the Canton of Bern. It provides a structured way to capture, manage, and retrieve geospatial metadata through a web-based admin interface.
+Open-source metadata management platform for the WIS-BE project of the Bereich Geoinformation, Amt für Wald und Naturgefahren, Canton of Bern. It provides a structured way to capture, manage, and retrieve geospatial metadata through a web-based admin interface.
 
 GEO Metadata Engine is open-source software, licensed under the [BSD 3-Clause License](LICENSE).
 
@@ -23,7 +23,7 @@ No public demo instance is currently available.
 
 ## Contact
 
-The technical contact for GEO Metadata Engine is the Bereich Geoinformation of the Amt für Wald und Naturgefahren, Canton of Bern. They can be reached at wald@be.ch.
+The technical contact for GEO Metadata Engine is Pascal Ehrler of the Bereich Geoinformation, Amt für Wald und Naturgefahren, Canton of Bern.
 
 **Project owner:**
 Kanton Bern
