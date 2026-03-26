@@ -1,5 +1,9 @@
 from django.contrib import admin
 from django import forms
+
+admin.site.site_header = "GEO Metadaten Engine"
+admin.site.site_title = "GEO Metadaten Engine"
+admin.site.index_title = "Administration"
 from .models import (
     Thema, Geopaeckli, Ebene, Attribut, Wertetabelle,
     Dienst, View, Tag, Trigger,
