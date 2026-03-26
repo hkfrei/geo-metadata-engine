@@ -109,7 +109,7 @@ Please read the following documents before contributing:
 ## Contributors
 
 - [Nina Bonassi](https://github.com/nninnja) (Developer)
-- [Pascal Ehrler]() (Product Manager)
+- [Pascal Ehrler](https://github.com/elpixel-ch) (Product Manager)
 - [Hanskaspar Frei](https://github.com/hkfrei) (Initial developer & Architect)
 
 (in alphabetical order)
