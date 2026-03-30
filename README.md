@@ -43,14 +43,14 @@ See [the conda documentation](https://docs.conda.io/en/latest/) for installation
 Clone the repository:
 
 ```
-git clone https://github.com/hkfrei/bgi_metadata.git
-cd bgi_metadata
+git clone https://github.com/hkfrei/geo-metadata-engine.git
+cd geo-metadata-engine
 ```
 
 Create and activate a virtual environment:
 
 ```
-conda create -n bgi_metadata python=3.12
+conda create -n bgi_metadata python=3.14
 conda activate bgi_metadata
 ```
 
